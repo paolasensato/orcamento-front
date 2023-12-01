@@ -12,10 +12,9 @@
 
 .content {
     background: white;
-    padding: 20px;
+    padding: 25px 50px 25px 50px;
     border-radius: 4px;
     position: relative;
-    padding: 50px;
 }
 
 .modalClose {

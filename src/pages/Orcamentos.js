@@ -4,7 +4,8 @@ import Input from "../components/Input/Input";
 import Modal from "../components/Modal/Modal";
 import styles from './Orcamento.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faTrash } from "@fortawesome/free-solid-svg-icons";
+import Button from "../components/Button/Button";
 
 const Orcamentos = () => {
     const [formValues, setFormValues] = useState({});
@@ -83,64 +84,100 @@ const Orcamentos = () => {
 
     return (
         <div className={styles.container}>
-            <h1>Tela de Orçamentos</h1>
+            <div className={styles.card}>
+                <h1>Tela de Orçamentos</h1>
 
-            <form onSubmit={handleSubmit}>
-                <Input
-                    label="Nome do Cliente"
-                    name="nome_cliente"
-                    type="text"
-                    onChange={handleOnChange}
-                    required
-                />
-                <Input
-                    label="Data do Orçamento"
-                    name="data"
-                    type="date"
-                    onChange={handleOnChange}
-                    required
-                />
-
-                <h3>Produtos</h3>
-
-                <button type="button" className="modal-open" onClick={handleOpenModal}>Adicionar Produto</button>
-
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                <form onSubmit={handleSubmit}>
                     <Input
-                        label="Nome do Produto"
-                        name="nome"
+                        label="Nome do Cliente"
+                        name="nome_cliente"
                         type="text"
-                        onChange={handleProductOnChange}
+                        maxlength="45"
+                        onChange={handleOnChange}
                         required
                     />
                     <Input
-                        label="Valor do Produto"
-                        name="valor"
-                        type="number"
-                        onChange={handleProductOnChange}
+                        label="Data do Orçamento"
+                        name="data"
+                        type="date"
+                        onChange={handleOnChange}
                         required
                     />
-                    <button 
-                        type="button"
-                        onClick={handleAddProduct}
-                        disabled={buttonDisabled}
-                    >Adicionar</button>
-                </Modal>
 
-                <button type="submit">Salvar</button>
-            </form>
-            
-            {
-                formValues.produtos?.map((produto, index) => (
-                    <div key={index}>
-                        <p>{produto.nome}</p>
-                        <p>{produto.valor}</p>
-                        <button type="button" onClick={() => handleTrash(index)}>
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
+                    <div className={styles.spaceProduct}>
+                        <h2>Produtos</h2>
+                        <Button
+                            type="button"
+                            text="Adicionar"
+                            icon={<FontAwesomeIcon icon={faAdd}/>}
+                            onClick={handleOpenModal}
+                        />
                     </div>
-                ))
-            }
+
+                    <div>
+                        {formValues.produtos?.length > 0 ? (
+                            <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Valor</th>
+                                        <th>Remover</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {formValues.produtos.map((produto, index) => (
+                                        <tr key={index}>
+                                            <td>{produto.nome}</td>
+                                            <td>{produto.valor}</td>
+                                            <td>
+                                                <Button
+                                                    type="button"
+                                                    icon={<FontAwesomeIcon icon={faTrash} />}
+                                                    className={styles.trashButton}
+                                                    onClick={() => handleTrash(index)}
+                                                />   
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : null}
+                    </div>
+
+                    <div className={styles.buttonSave}>
+                        <Button type="submit" text="Salvar"/>
+                    </div>               
+
+                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                        <h2>Cadastro de Produto</h2>
+                        <Input
+                            label="Nome do Produto"
+                            name="nome"
+                            type="text"
+                            maxlength="45"
+                            onChange={handleProductOnChange}
+                            required
+                        />
+                        <Input
+                            label="Valor do Produto"
+                            name="valor"
+                            type="number"
+                            min={0}
+                            onChange={handleProductOnChange}
+                            required
+                        />
+
+                        <div className={styles.addButton}>
+                            <Button
+                                type="button"
+                                onClick={handleAddProduct}
+                                disabled={buttonDisabled}
+                                text="Salvar"
+                            />
+                        </div>
+                    </Modal>
+                </form>
+            </div>
         </div>
     );
 }
