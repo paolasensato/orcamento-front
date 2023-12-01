@@ -67,12 +67,13 @@ const Orcamentos = () => {
                 return;
             }
 
-            const {data} = await axios.post('/api/v1/orcamentos', formValues);
+            await axios.post('/api/v1/orcamentos', formValues);
 
-            console.log(data);
+            alert('Orçamento cadastrado com sucesso.');
             
+            window.location.reload();
         } catch (error) {
-            console.log(error);
+            alert('Houve um erro ao realizar operação, tente novamente mais tarde.');
         }
     }
 
@@ -113,6 +114,8 @@ const Orcamentos = () => {
                             onClick={handleOpenModal}
                         />
                     </div>
+
+                    <span>Quantidade de Produtos: {formValues.produtos?.length || 0}</span>
 
                     <div>
                         {formValues.produtos?.length > 0 ? (
